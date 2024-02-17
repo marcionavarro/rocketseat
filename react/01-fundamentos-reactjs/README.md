@@ -8,3 +8,8 @@ install
 -> JavaScript  
 `npm install`  
 `npm run dev` 
+
+### 02-Estrutura da aplicação
+
+CSS Module  
+[https://github.com/css-modules/css-modules](https://github.com/css-modules/css-modules)
