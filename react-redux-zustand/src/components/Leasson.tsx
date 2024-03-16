@@ -1,13 +1,15 @@
 import { Video } from "lucide-react";
+import { useDispatch } from "react-redux";
 
-interface LeassonProps{
+interface LessonProps{
     title: string;
     duration: string;
+    onPlay: () => void;
 }
 
-export function Leasson({title, duration}: LeassonProps) {
+export function Leasson({title, duration, onPlay}: LessonProps) {
     return (
-        <button className="flex items-center gap-3 text-sm text-zinc-400">
+        <button onClick={onPlay} className="flex items-center gap-3 text-sm text-zinc-400">
             <Video className="w-4 h-4 text-zinc-500" />
             <span>{title}</span>
             <span className="ml-auto font-mono text-xs text-zinc-500">{duration}</span>
