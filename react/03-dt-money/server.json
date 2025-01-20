@@ -23,6 +23,38 @@
       "category": "Educação",
       "price": 1980,
       "createdAt": "2025-01-19T20:00:01.475Z"
+    },
+    {
+      "description": "Desenvolvimento  de app",
+      "price": 10000,
+      "category": "Venda",
+      "type": "income",
+      "createdAt": "2025-01-20T02:43:23.464Z",
+      "id": 4
+    },
+    {
+      "description": "Pastel",
+      "price": 15,
+      "category": "Alimentação",
+      "type": "outcome",
+      "createdAt": "2025-01-20T02:48:18.583Z",
+      "id": 5
+    },
+    {
+      "description": "Whey de Chocolate",
+      "price": 120,
+      "category": "Alimentação",
+      "type": "outcome",
+      "createdAt": "2025-01-20T03:00:41.237Z",
+      "id": 6
+    },
+    {
+      "description": "teste",
+      "price": 123456,
+      "category": "jkljlkljkk",
+      "type": "outcome",
+      "createdAt": "2025-01-20T04:03:23.807Z",
+      "id": 7
     }
   ]
 }
