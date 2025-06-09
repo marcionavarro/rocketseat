@@ -1,10 +1,17 @@
-import { Link } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { Link, router } from 'expo-router'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 
 export default function SignUp() {
+  function back() {
+    if(!router.canGoBack()){
+      return Alert.alert("Não é possivel voltar!")
+    }
+    router.back()
+  }
+
   return (
     <View style={styles.container}>
-      <Link href="/" style={styles.back}>Voltar</Link>
+      <Text style={styles.back} onPress={back}>Voltar</Text>
     </View>
   )
 }
