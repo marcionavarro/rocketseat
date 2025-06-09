@@ -8,25 +8,41 @@ import { colors } from "@/styles/colors";
 import { router } from "expo-router";
 import { useState } from "react";
 import { styles } from "./styles";
+import { linkStorage } from "@/storage/linkl-storage";
 
 export default function add() {
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
 
-  function handleAdd() {
-    if (!category) {
-      return Alert.alert("Categoria", "Selecione a categoria")
-    }
+  async function handleAdd() {
+    try {
+      if (!category) {
+        return Alert.alert("Categoria", "Selecione a categoria")
+      }
 
-    if (!name.trim()) {
-      return Alert.alert("Nome", "Informe o nome")
-    }
+      if (!name.trim()) {
+        return Alert.alert("Nome", "Informe o nome")
+      }
 
-    if (!url.trim()) {
-      return Alert.alert("URL", "Informe a url")
+      if (!url.trim()) {
+        return Alert.alert("URL", "Informe a url")
+      }
+
+      await linkStorage.save({
+        id: new Date().getTime().toString(),
+        category,
+        name,
+        url
+      })
+
+      const data = await linkStorage.get()
+      console.log(data)
+
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível salvar o link")
+      console.log(error)
     }
-    console.log({ category, name, url })
   }
 
   return (
@@ -42,7 +58,12 @@ export default function add() {
       <Categories onChange={setCategory} selected={category} />
       <View style={styles.form}>
         <Input placeholder="Nome" onChangeText={setName} autoCorrect={false} />
-        <Input placeholder="URL" onChangeText={setUrl} />
+        <Input
+          placeholder="URL"
+          onChangeText={setUrl}
+          autoCorrect={false}
+          autoCapitalize="none"
+        />
         <Button title="Adicionar" onPress={handleAdd} />
       </View>
     </View>

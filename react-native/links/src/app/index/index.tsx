@@ -5,12 +5,28 @@ import { colors } from '@/styles/colors';
 import { categories } from '@/utils/categories';
 import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useState } from 'react';
-import { FlatList, Image, Modal, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, FlatList, Image, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './styles';
+import { LinkStorage, linkStorage } from '@/storage/linkl-storage';
 
 export default function Index() {
+    const [links, setLinks] = useState<LinkStorage[]>([])
     const [category, setCategory] = useState(categories[0].name)
+
+    async function getLinks() {
+        try {
+            const response = await linkStorage.get()
+            setLinks(response)
+        } catch (error) {
+            Alert.alert("Erro", "Não possível listar os links")
+        }
+    }
+
+    useEffect(() => {
+        getLinks()
+    }, [category])
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -19,15 +35,15 @@ export default function Index() {
                     <MaterialIcons name='add' size={32} color={colors.green[300]} />
                 </TouchableOpacity>
             </View>
-            <Categories onChange={setCategory} selected={category}/>
+            <Categories onChange={setCategory} selected={category} />
 
             <FlatList
-                data={["1", "2", "3", "4", "5"]}
-                keyExtractor={(item) => item}
-                renderItem={() => (
+                data={links}
+                keyExtractor={(item) => item.id}
+                renderItem={({item}) => (
                     <Link
-                        name='Fullstack Developer'
-                        url='https://marcionavarro.com.br'
+                        name={item.name}
+                        url={item.url}
                         onDetails={() => console.log("Clicou!")}
                     />
                 )}
@@ -55,7 +71,7 @@ export default function Index() {
 
                         <View style={styles.modalFooter}>
                             <Option name='Excluir' icon='delete' variant='secondary' />
-                            <Option name='Abrir' icon='language'  />
+                            <Option name='Abrir' icon='language' />
                         </View>
                     </View>
                 </View>
