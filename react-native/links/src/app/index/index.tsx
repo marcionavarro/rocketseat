@@ -1,31 +1,41 @@
 import { Categories } from '@/components/categories';
 import { Link } from '@/components/link';
 import { Option } from '@/components/option';
+import { LinkStorage, linkStorage } from '@/storage/linkl-storage';
 import { colors } from '@/styles/colors';
 import { categories } from '@/utils/categories';
 import { MaterialIcons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { router, useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { Alert, FlatList, Image, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './styles';
-import { LinkStorage, linkStorage } from '@/storage/linkl-storage';
 
 export default function Index() {
+    const [showModal, setShowModal] = useState(false)
+    const [link, setLink] = useState<LinkStorage>({} as LinkStorage)
     const [links, setLinks] = useState<LinkStorage[]>([])
     const [category, setCategory] = useState(categories[0].name)
 
     async function getLinks() {
         try {
             const response = await linkStorage.get()
-            setLinks(response)
+
+            const filtered = response.filter((link) => link.category === category)
+
+            setLinks(filtered)
         } catch (error) {
             Alert.alert("Erro", "Não possível listar os links")
         }
     }
 
-    useEffect(() => {
+    function handleDetails(selected: LinkStorage) {
+        setShowModal(true)
+        setLink(selected)
+    }
+
+    useFocusEffect(useCallback(() => {
         getLinks()
-    }, [category])
+    }, [category]))
 
     return (
         <View style={styles.container}>
@@ -40,11 +50,11 @@ export default function Index() {
             <FlatList
                 data={links}
                 keyExtractor={(item) => item.id}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                     <Link
                         name={item.name}
                         url={item.url}
-                        onDetails={() => console.log("Clicou!")}
+                        onDetails={() => handleDetails(item)}
                     />
                 )}
                 style={styles.links}
@@ -52,21 +62,25 @@ export default function Index() {
                 showsVerticalScrollIndicator={false}
             />
 
-            <Modal transparent visible={false}>
+            <Modal transparent visible={showModal} animationType='slide'>
                 <View style={styles.modal}>
                     <View style={styles.modalContent}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalCategory}>Curso</Text>
+                            <Text style={styles.modalCategory}>{link.category}</Text>
                             <TouchableOpacity>
-                                <MaterialIcons name='close' size={20} color={colors.gray[400]} />
+                                <MaterialIcons
+                                    name='close' size={20}
+                                    color={colors.gray[400]}
+                                    onPress={() => setShowModal(false)}
+                                />
                             </TouchableOpacity>
                         </View>
 
                         <Text style={styles.modalLinkName}>
-                            Marcio Navarro
+                            {link.name}
                         </Text>
                         <Text style={styles.modalUrl}>
-                            https://marcionavarro.com.br
+                            {link.url}
                         </Text>
 
                         <View style={styles.modalFooter}>
