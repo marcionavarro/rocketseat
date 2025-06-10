@@ -1,4 +1,4 @@
-import { Link, router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function SignUp() {
