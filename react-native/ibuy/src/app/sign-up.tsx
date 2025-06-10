@@ -1,9 +1,11 @@
-import { Link, router } from 'expo-router'
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { Link, router, useLocalSearchParams } from 'expo-router'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function SignUp() {
+  const { id, name } = useLocalSearchParams()
+
   function back() {
-    if(!router.canGoBack()){
+    if (!router.canGoBack()) {
       return Alert.alert("Não é possivel voltar!")
     }
     router.back()
@@ -11,7 +13,9 @@ export default function SignUp() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.back} onPress={back}>Voltar</Text>
+      <TouchableOpacity onPress={back}>
+        <Text style={styles.back}>Voltar</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -25,5 +29,8 @@ const styles = StyleSheet.create({
   back: {
     fontSize: 16,
     fontWeight: "bold"
+  },
+  title: {
+    fontSize: 22
   }
 })
